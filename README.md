@@ -95,7 +95,7 @@ Once you input valid values and press the "PREDICT" button, the app will display
 ----------------
 You can watch a demo of the mobile app and how it interacts with the API here:
 
-`[https://youtu.be/vSFQojWoAYg]`
+[https://youtu.be/vSFQojWoAYg]
 
 ## Technologies Used
 -------------------
