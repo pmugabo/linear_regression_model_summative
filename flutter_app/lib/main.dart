@@ -12,10 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Life Expectancy Predictor',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        brightness: Brightness.dark,
+        primaryColor: Colors.teal,
+        fontFamily: 'Roboto',
       ),
       home: const PredictionPage(),
     );
@@ -88,44 +90,47 @@ class _PredictionPageState extends State<PredictionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Life Expectancy Predictor'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildTextField(_hdiRankController, 'HDI Rank (1-200)'),
-                const SizedBox(height: 12),
-                _buildTextField(_le1990Controller, 'Life Expectancy 1990 (30-90)'),
-                const SizedBox(height: 12),
-                _buildTextField(_le2000Controller, 'Life Expectancy 2000 (30-90)'),
-                const SizedBox(height: 12),
-                _buildTextField(_le2010Controller, 'Life Expectancy 2010 (30-90)'),
-                const SizedBox(height: 12),
-                _buildTextField(_le2020Controller, 'Life Expectancy 2020 (30-90)'),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _predict,
-                  child: _isLoading 
-                      ? const CircularProgressIndicator(color: Colors.white) 
-                      : const Text('Predict'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                if (_predictionResult.isNotEmpty)
-                  Text(
-                    _predictionResult,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1a237e), Color(0xFF004d40)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'Life Expectancy Predictor',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-              ],
+                  const SizedBox(height: 32),
+                  _buildTextField(_hdiRankController, 'HDI Rank', Icons.leaderboard),
+                  const SizedBox(height: 16),
+                  _buildTextField(_le1990Controller, 'Life Expectancy 1990', Icons.history),
+                  const SizedBox(height: 16),
+                  _buildTextField(_le2000Controller, 'Life Expectancy 2000', Icons.history),
+                  const SizedBox(height: 16),
+                  _buildTextField(_le2010Controller, 'Life Expectancy 2010', Icons.history),
+                  const SizedBox(height: 16),
+                  _buildTextField(_le2020Controller, 'Life Expectancy 2020', Icons.history),
+                  const SizedBox(height: 32),
+                  _buildPredictButton(),
+                  const SizedBox(height: 32),
+                  if (_predictionResult.isNotEmpty) _buildResultCard(),
+                ],
+              ),
             ),
           ),
         ),
@@ -133,13 +138,25 @@ class _PredictionPageState extends State<PredictionPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label) {
+  Widget _buildTextField(TextEditingController controller, String label, IconData icon) {
     return TextFormField(
       controller: controller,
       keyboardType: TextInputType.number,
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
-        border: const OutlineInputBorder(),
+        labelStyle: const TextStyle(color: Colors.white70),
+        prefixIcon: Icon(icon, color: Colors.white70),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.1),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.tealAccent),
+        ),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -150,6 +167,65 @@ class _PredictionPageState extends State<PredictionPage> {
         }
         return null;
       },
+    );
+  }
+
+  Widget _buildPredictButton() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: const LinearGradient(
+          colors: [Colors.tealAccent, Colors.cyanAccent],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.teal.withOpacity(0.4),
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: ElevatedButton(
+        onPressed: _isLoading ? null : _predict,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        child: _isLoading
+            ? const CircularProgressIndicator(color: Colors.black)
+            : const Text(
+                'PREDICT',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+      ),
+    );
+  }
+
+  Widget _buildResultCard() {
+    return Card(
+      color: Colors.white.withOpacity(0.1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          _predictionResult,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 }
