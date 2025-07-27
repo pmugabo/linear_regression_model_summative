@@ -102,20 +102,22 @@ class _PredictionPageState extends State<PredictionPage> {
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    'Life Expectancy Predictor',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      'Life Expectancy Predictor',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 32),
+                    const SizedBox(height: 32),
                   _buildTextField(_hdiRankController, 'HDI Rank', Icons.leaderboard, hint: 'Enter a number between 1-200'),
                   const SizedBox(height: 16),
                   _buildTextField(_le1990Controller, 'Life Expectancy 1990', Icons.history, hint: 'Enter a number between 30-90'),
@@ -129,7 +131,8 @@ class _PredictionPageState extends State<PredictionPage> {
                   _buildPredictButton(),
                   const SizedBox(height: 32),
                   if (_predictionResult.isNotEmpty) _buildResultCard(),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
