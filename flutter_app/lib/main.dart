@@ -47,8 +47,7 @@ class _PredictionPageState extends State<PredictionPage> {
         _predictionResult = '';
       });
 
-      // IMPORTANT: Replace this with your actual Render URL
-      const apiUrl = 'YOUR_API_URL_HERE/predict';
+      const apiUrl = 'https://linear-regression-model-eyk5.onrender.com/predict';
 
       try {
         final response = await http.post(
