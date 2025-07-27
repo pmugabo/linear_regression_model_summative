@@ -116,15 +116,15 @@ class _PredictionPageState extends State<PredictionPage> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  _buildTextField(_hdiRankController, 'HDI Rank', Icons.leaderboard),
+                  _buildTextField(_hdiRankController, 'HDI Rank', Icons.leaderboard, hint: 'Enter a number between 1-200'),
                   const SizedBox(height: 16),
-                  _buildTextField(_le1990Controller, 'Life Expectancy 1990', Icons.history),
+                  _buildTextField(_le1990Controller, 'Life Expectancy 1990', Icons.history, hint: 'Enter a number between 30-90'),
                   const SizedBox(height: 16),
-                  _buildTextField(_le2000Controller, 'Life Expectancy 2000', Icons.history),
+                  _buildTextField(_le2000Controller, 'Life Expectancy 2000', Icons.history, hint: 'Enter a number between 30-90'),
                   const SizedBox(height: 16),
-                  _buildTextField(_le2010Controller, 'Life Expectancy 2010', Icons.history),
+                  _buildTextField(_le2010Controller, 'Life Expectancy 2010', Icons.history, hint: 'Enter a number between 30-90'),
                   const SizedBox(height: 16),
-                  _buildTextField(_le2020Controller, 'Life Expectancy 2020', Icons.history),
+                  _buildTextField(_le2020Controller, 'Life Expectancy 2020', Icons.history, hint: 'Enter a number between 30-90'),
                   const SizedBox(height: 32),
                   _buildPredictButton(),
                   const SizedBox(height: 32),
@@ -138,13 +138,15 @@ class _PredictionPageState extends State<PredictionPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, IconData icon) {
+  Widget _buildTextField(TextEditingController controller, String label, IconData icon, {String? hint}) {
     return TextFormField(
       controller: controller,
       keyboardType: TextInputType.number,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.white54, fontSize: 12),
         labelStyle: const TextStyle(color: Colors.white70),
         prefixIcon: Icon(icon, color: Colors.white70),
         filled: true,
